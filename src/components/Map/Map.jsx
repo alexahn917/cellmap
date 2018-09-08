@@ -122,7 +122,7 @@ class Map extends React.Component {
                         <Typography variant="display2"
                                     className={classes.title}
                                     color="textSecondary">
-                          Node
+                          Cells
                         </Typography>
                         <Typography variant="subheading"
                                     className={classes.title}
@@ -138,7 +138,7 @@ class Map extends React.Component {
                         <Typography variant="display2"
                                     className={classes.title}
                                     color="textSecondary">
-                          Edges
+                          Markers
                         </Typography>
                         <Typography variant="subheading"
                                     className={classes.title}

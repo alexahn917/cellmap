@@ -72,13 +72,13 @@ class MainPage extends React.Component {
                   defaultSelectedKeys={['1']}>
               <Menu.Item key="1">
                 <Link to={routes.MAP}>
-                  <Icon type="cloud"/>
+                  <Icon type="compass"/>
                   <span className="nav-text">Cell Map</span>
                 </Link>
               </Menu.Item>
               <Menu.Item key="2">
                 <Link to={routes.DATABASE}>
-                  <Icon type="bar-chart"/>
+                  <Icon type="database"/>
                   <span className="nav-text">Database</span>
                 </Link>
               </Menu.Item>
