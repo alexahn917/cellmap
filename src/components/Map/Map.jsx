@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from "@material-ui/core/Typography/Typography";
 import Divider from "@material-ui/core/Divider/Divider";
-import {Col, Button} from "antd";
+import {AutoComplete, Button, Col, Row} from "antd";
 import Graph from 'react-graph-vis';
 import {Card, CardActions, CardContent} from "@material-ui/core";
+import Loader from "../Main/Loader";
 
 const styles = theme => ({
   container: {
@@ -13,6 +14,10 @@ const styles = theme => ({
     flexDirection: 'column',
     minHeight: '600px',
     margin: theme.spacing.unit * 2,
+  },
+  header: {
+    display: 'flex',
+    alignItems: 'baseline',
   },
   divider: {
     margin: '20px 0 20px 0',
@@ -86,12 +91,24 @@ class Map extends React.Component {
     })
   };
 
+  onSearchCell = (cellID) => {
+    this.graph.current.Network.selectNodes([cellID]);
+    this.setState({
+      targetNodes: this.graph.current.Network.getSelectedNodes(),
+      targetEdges: [],
+    })
+  };
+
   onClickDetail = () => {
-    console.log(this.graph.current.Network.getSelection())
+    alert('not implemented yet');
   };
 
   render() {
     const {classes, data} = this.props;
+
+    if (!data) {
+      return <Loader/>
+    }
 
     const nodesSelected = this.state.targetNodes
         && this.state.targetNodes.length > 0;
@@ -101,10 +118,23 @@ class Map extends React.Component {
     return (
         <div className={classes.container}>
           <div>
-            <Typography className={classes.title} variant="display2"
-                        align="left">
-              <b>{'Map'}</b>
-            </Typography>
+            <Row gutter={23} className={classes.header}>
+              <Col xs={12} sm={12} md={12}>
+                <Typography className={classes.title} variant="display2"
+                            align="left">
+                  <b>{'Map'}</b>
+                </Typography>
+              </Col>
+              <Col xs={12} sm={12} md={12}>
+                <AutoComplete
+                    dataSource={data.nodes.map((item) => {return {value: item.id, text: item.label}})}
+                    style={{width: 200, color: 'black'}}
+                    onSelect={this.onSearchCell}
+                    filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+                    placeholder="search"
+                />
+              </Col>
+            </Row>
             <Divider className={classes.divider}/>
             <Col xs={24} sm={24} md={12}>
               <div className={classes.graphContainer}>
