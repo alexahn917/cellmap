@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from "@material-ui/core/Typography/Typography";
 import Divider from "@material-ui/core/Divider/Divider";
-import {Col} from "antd";
+import {Col, Button} from "antd";
 import Graph from 'react-graph-vis';
-import {Button, Card, CardActions, CardContent} from "@material-ui/core";
+import {Card, CardActions, CardContent} from "@material-ui/core";
 
 const styles = theme => ({
   container: {
@@ -42,7 +42,6 @@ const options = {
   },
   nodes: {
     color: {
-      // color: "#ffbc50",
       highlight: "#ff7049",
       hover: "#d48c83",
     },
@@ -69,21 +68,26 @@ const options = {
 };
 
 class Map extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       targetNodes: null,
       targetEdges: null,
-    }
+      network: null,
+    };
+    this.graph = React.createRef();
   }
 
   onSelect = (event) => {
     const {nodes, edges} = event;
-    console.log(event);
     this.setState({
       targetNodes: nodes,
       targetEdges: edges,
     })
+  };
+
+  onClickDetail = () => {
+    console.log(this.graph.current.Network.getSelection())
   };
 
   render() {
@@ -105,13 +109,13 @@ class Map extends React.Component {
             <Col xs={24} sm={24} md={12}>
               <div className={classes.graphContainer}>
                 {data ? <Graph
-                        graph={data}
-                        options={options}
-                        events={{
-                          select: this.onSelect
-                        }}
-                    />
-                    : null}
+                    ref={this.graph}
+                    graph={data}
+                    options={options}
+                    events={{
+                      select: this.onSelect
+                    }}
+                /> : null}
               </div>
             </Col>
             <Col xs={24} sm={24} md={12}>
@@ -127,9 +131,9 @@ class Map extends React.Component {
                         <Typography variant="subheading"
                                     className={classes.title}
                                     color="textSecondary">
-                          {this.state.targetNodes.map((edge) =>
-                              <div key={edge}>
-                                {edge}
+                          {this.state.targetNodes.map((node) =>
+                              <div key={node}>
+                                {node}
                               </div>
                           )}
                         </Typography>
@@ -143,12 +147,19 @@ class Map extends React.Component {
                         <Typography variant="subheading"
                                     className={classes.title}
                                     color="textSecondary">
-                          {this.state.targetEdges}
+                          {this.state.targetEdges.map((edge) =>
+                              <div key={edge}>
+                                {edge}
+                              </div>
+                          )}
                         </Typography>
                       </div> : null}
                     </CardContent>
                     <CardActions className={classes.cardAction}>
-                      <Button size="small">Details</Button>
+                      <Button type="secondary"
+                              onClick={this.onClickDetail}>
+                        Details
+                      </Button>
                     </CardActions>
                   </Card>
                   : null
